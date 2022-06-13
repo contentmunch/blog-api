@@ -1,0 +1,17 @@
+type Query {
+    blogs(pageSize: Int nextPageToken: String label: String): Blogs
+    searchBlogs(query: String! nextPageToken: String): Blogs
+    blog(blogId: String!): Blog
+}
+type Blogs {
+    blogs: [Blog]
+    nextPageToken: String
+}
+
+type Blog {
+    id: String
+    title: String
+    images: [String]
+    published: String
+    content:String
+}

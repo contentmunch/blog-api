@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: blog-api
+muncher:
+  blog:
+    clientId: ${GOOGLE_API_CLIENT_ID}
+    clientSecret: ${GOOGLE_API_CLIENT_SECRET}
+    refreshToken: ${GOOGLE_API_REFRESH_TOKEN}
+    tokenServer: https://oauth2.googleapis.com/token
+    blogId: 2624039357299718788
+
+
