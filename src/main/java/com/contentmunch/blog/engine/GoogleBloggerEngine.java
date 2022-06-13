@@ -56,6 +56,25 @@ public class GoogleBloggerEngine implements BloggerEngine {
         }
     }
 
+    private Blogs blogsFrom(PostList posts) {
+        List<Blog> blogs = new ArrayList<>();
+        if (posts.getItems() != null) {
+            posts.getItems().forEach(item -> blogs.add(
+                    Blog.builder()
+                            .id(item.getId())
+                            .title(item.getTitle())
+                            .content(item.getContent())
+                            .published(item.getPublished())
+                            .images(item.getImages() != null ? item.getImages().stream().map(Post.Images::getUrl).collect(Collectors.toList()) : null)
+                            .build()));
+        }
+
+        return Blogs.builder()
+                .blogs(blogs)
+                .nextPageToken(posts.getNextPageToken())
+                .build();
+    }
+
     @Override
     public Blogs getBlogs(List<String> fields, Long pageSize, String nextPageToken, String label) {
         try {
@@ -69,23 +88,7 @@ public class GoogleBloggerEngine implements BloggerEngine {
             if (nextPageToken != null)
                 listAction.setPageToken(nextPageToken);
 
-            PostList posts = listAction.execute();
-            List<Blog> blogs = new ArrayList<>();
-            if (posts.getItems() != null) {
-                posts.getItems().forEach(item -> blogs.add(
-                        Blog.builder()
-                                .id(item.getId())
-                                .title(item.getTitle())
-                                .content(item.getContent())
-                                .published(item.getPublished())
-                                .images(item.getImages() != null ? item.getImages().stream().map(Post.Images::getUrl).collect(Collectors.toList()) : null)
-                                .build()));
-            }
-
-            return Blogs.builder()
-                    .blogs(blogs)
-                    .nextPageToken(posts.getNextPageToken())
-                    .build();
+            return blogsFrom(listAction.execute());
         } catch (IOException e) {
             log.error("Error Retrieving Blogs", e);
             throw new BlogException("Error Retrieving Blogs", e);
@@ -121,23 +124,7 @@ public class GoogleBloggerEngine implements BloggerEngine {
             var actionFields = MessageFormat.format("items({0}),nextPageToken", String.join(",", fields));
             search.setFields(actionFields);
             search.setFetchBodies(true);
-            PostList posts = search.execute();
-            List<Blog> blogs = new ArrayList<>();
-            if (posts.getItems() != null) {
-                posts.getItems().forEach(item -> blogs.add(
-                        Blog.builder()
-                                .id(item.getId())
-                                .title(item.getTitle())
-                                .content(item.getContent())
-                                .published(item.getPublished())
-                                .images(item.getImages() != null ? item.getImages().stream().map(Post.Images::getUrl).collect(Collectors.toList()) : null)
-                                .build()));
-            }
-
-            return Blogs.builder()
-                    .blogs(blogs)
-                    .nextPageToken(posts.getNextPageToken())
-                    .build();
+            return blogsFrom(search.execute());
         } catch (IOException e) {
             log.error("Error Retrieving Blogs", e);
             throw new BlogException("Error Retrieving Blogs", e);
