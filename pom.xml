@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.contentmunch</groupId>
     <artifactId>blog-api</artifactId>
-    <version>1.0.0.RELEASE</version>
+    <version>1.0.1.RELEASE</version>
     <name>blog-api</name>
     <description>Blog api</description>
     <properties>
@@ -80,7 +80,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/contentmunch/mail-api</url>
+            <url>https://maven.pkg.github.com/contentmunch/blog-api</url>
         </repository>
     </distributionManagement>
 
