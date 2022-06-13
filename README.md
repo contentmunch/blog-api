@@ -7,6 +7,7 @@ API for retrieving blog.
 To use this library:
 
 * add the mvn package to your pom.xml
+* requires spring boot version 2.7.0+
 
 ## Coding rules
 
