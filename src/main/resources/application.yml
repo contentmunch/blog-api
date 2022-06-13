@@ -1,6 +1,11 @@
 spring:
   application:
     name: blog-api
+  graphql:
+    cors:
+      allowed-origins: "*"
+    graphiql:
+      enabled: true
 muncher:
   blog:
     clientId: ${GOOGLE_API_CLIENT_ID}
