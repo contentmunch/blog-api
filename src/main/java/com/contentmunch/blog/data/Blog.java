@@ -13,4 +13,5 @@ public class Blog {
     private List<String> images;
     private String published;
     private String content;
+    private List<String> labels;
 }

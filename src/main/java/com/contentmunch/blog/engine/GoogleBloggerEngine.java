@@ -66,6 +66,7 @@ public class GoogleBloggerEngine implements BloggerEngine {
                             .content(item.getContent())
                             .published(item.getPublished())
                             .images(item.getImages() != null ? item.getImages().stream().map(Post.Images::getUrl).collect(Collectors.toList()) : null)
+                            .labels(item.getLabels())
                             .build()));
         }
 
@@ -109,6 +110,7 @@ public class GoogleBloggerEngine implements BloggerEngine {
                     .title(post.getTitle())
                     .content(post.getContent())
                     .published(post.getPublished())
+                    .labels(post.getLabels())
                     .images(post.getImages() != null ? post.getImages().stream().map(Post.Images::getUrl).collect(Collectors.toList()) : null)
                     .build();
         } catch (IOException e) {

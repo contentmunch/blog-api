@@ -13,5 +13,6 @@ type Blog {
     title: String
     images: [String]
     published: String
-    content:String
+    content: String
+    labels: [String]
 }
