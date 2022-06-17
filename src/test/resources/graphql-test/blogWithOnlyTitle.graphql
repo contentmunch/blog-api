@@ -1,0 +1,5 @@
+query blog($id: ID!) {
+    blog(id: $id) {
+        title
+    }
+}

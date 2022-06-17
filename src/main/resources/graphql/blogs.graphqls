@@ -1,7 +1,7 @@
 type Query {
     blogs(pageSize: Int nextPageToken: String label: String): Blogs
     searchBlogs(query: String! nextPageToken: String): Blogs
-    blog(blogId: String!): Blog
+    blog(id: ID!): Blog
 }
 type Blogs {
     blogs: [Blog]
@@ -9,7 +9,7 @@ type Blogs {
 }
 
 type Blog {
-    id: String
+    id: ID
     title: String
     images: [String]
     published: String

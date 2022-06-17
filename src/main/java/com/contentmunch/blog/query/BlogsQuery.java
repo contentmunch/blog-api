@@ -1,9 +1,8 @@
 package com.contentmunch.blog.query;
 
-import com.contentmunch.blog.configuration.BlogConfig;
 import com.contentmunch.blog.data.Blog;
 import com.contentmunch.blog.data.Blogs;
-import com.contentmunch.blog.factory.BloggerFactory;
+import com.contentmunch.blog.engine.BloggerEngine;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
 import graphql.schema.SelectedField;
@@ -17,38 +16,39 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 public class BlogsQuery {
-    private final BlogConfig blogConfig;
+    private final BloggerEngine bloggerEngine;
 
     @QueryMapping
     public Blogs blogs(@Argument Long pageSize, @Argument String nextPageToken, @Argument String label, DataFetchingEnvironment dfe) {
-        var engine = BloggerFactory.getDefaultBlogEngine(blogConfig);
+
         DataFetchingFieldSelectionSet selectionSet = dfe.getSelectionSet();
 
         var fields = selectionSet.getFields().stream()
                 .filter(field -> field.getFullyQualifiedName().contains("Blogs.blogs/"))
                 .map(SelectedField::getName).toList();
+        var blogs = bloggerEngine.getBlogs(fields, pageSize, nextPageToken, label);
 
-        return engine.getBlogs(fields, pageSize, nextPageToken, label);
+        return blogs;
     }
 
     @QueryMapping
     public Blogs searchBlogs(@Argument String query, @Argument String nextPageToken, DataFetchingEnvironment dfe) {
-        var engine = BloggerFactory.getDefaultBlogEngine(blogConfig);
+
         DataFetchingFieldSelectionSet selectionSet = dfe.getSelectionSet();
 
         var fields = selectionSet.getFields().stream()
                 .filter(field -> field.getFullyQualifiedName().contains("Blogs.blogs/"))
                 .map(SelectedField::getName).toList();
-
-        return engine.searchBlogs(query, fields, nextPageToken);
+        var blogs = bloggerEngine.searchBlogs(query, fields, nextPageToken);
+        return blogs;
     }
 
     @QueryMapping
-    public Blog blog(@Argument String blogId, DataFetchingEnvironment dfe) {
-        var engine = BloggerFactory.getDefaultBlogEngine(blogConfig);
-        DataFetchingFieldSelectionSet selectionSet = dfe.getSelectionSet();
+    public Blog blog(@Argument String id, DataFetchingEnvironment dfe) {
 
-        return engine.getBlog(blogId, selectionSet.getFields().stream()
+        DataFetchingFieldSelectionSet selectionSet = dfe.getSelectionSet();
+        var blog = bloggerEngine.getBlog(id, selectionSet.getFields().stream()
                 .map(SelectedField::getName).collect(Collectors.toList()));
+        return blog;
     }
 }
